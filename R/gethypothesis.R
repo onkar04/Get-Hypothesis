@@ -11,7 +11,7 @@
 #' @export stats_get
 
 
-stats_get<-function(df,test,alpha,filename)
+stats_get_git<-function(df,test,alpha,filename)
   
 {
   library("dplyr")
