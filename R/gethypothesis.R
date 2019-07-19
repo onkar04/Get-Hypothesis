@@ -6,9 +6,9 @@
 #'
 #' @return NULL
 #'
-#' @examples stats_get(fram,"chisq",0.95,"file4") stats_get(fram,"onetail",0.95,"file4") stats_get(fram,"twotail",0.95,"file4") stats_get(fram,"anova",0.95,"file4")
+#' @examples stats_get_git(fram,"chisq",0.95,"file4") stats_get(fram,"onetail",0.95,"file4") stats_get(fram,"twotail",0.95,"file4") stats_get(fram,"anova",0.95,"file4")
 #'
-#' @export stats_get
+#' @export stats_get_git
 
 
 stats_get_git<-function(df,test,alpha,filename)
