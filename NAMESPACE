@@ -1,1 +1,1 @@
-exportPattern("stats_get")
+exportPattern("stats_get_git")
