@@ -1,3 +1,16 @@
+#' @title Hypothesis Testing 
+#'
+#' @description Does hypothesis testing and prints out the results and store them in excel file in your directory
+#'
+#' @param (dataframe,"function name",significance level,"name of file")
+#'
+#' @return NULL
+#'
+#' @examples stats_get(fram,"chisq",0.95,"file4") stats_get(fram,"onetail",0.95,"file4") stats_get(fram,"twotail",0.95,"file4") stats_get(fram,"anova",0.95,"file4")
+#'
+#' @export stats_get
+
+
 stats_get<-function(df,test,alpha,filename)
   
 {
