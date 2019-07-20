@@ -11,7 +11,7 @@
 #' @export stats_get_git
 
 
-stats_get_git<-function(df,test,alpha,filename)
+callhypothesis<-function(df,test,alpha,filename)
   
 {
   library("dplyr")
