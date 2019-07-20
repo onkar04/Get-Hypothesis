@@ -1,3 +1,12 @@
+#'Plot graphs to do Exploratory Data Analysis
+#'
+#'Provide Dataframe along with the type of hypothesis test need to be done.
+#'(dataframe,test="onetail",alpha=0.95,filenmae="fileone"
+#'@param x= dataframe
+#'@param vect= type of test needed to be done
+#'@param dir= "provide valid file name to save test results" 
+#'@return test results will be saved in separate sheets of excel file
+#'@author Onkar, Gnaneeswar
 #' @title Hypothesis Testing 
 #'
 #' @description Does hypothesis testing and prints out the results and store them in excel file in your directory
@@ -8,7 +17,7 @@
 #'
 #' @examples stats_get_git(fram,"chisq",0.95,"file4") stats_get(fram,"onetail",0.95,"file4") stats_get(fram,"twotail",0.95,"file4") stats_get(fram,"anova",0.95,"file4")
 #'
-#' @export stats_get_git
+#' @export callhypothesis
 
 
 callhypothesis<-function(df,test,alpha,filename)
