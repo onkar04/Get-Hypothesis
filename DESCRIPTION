@@ -1,4 +1,4 @@
-Package: gethypothesis
+Package: callhypothesis
 Type: Package
 Title: Hypothesis testing 
 Version: 0.1.0
