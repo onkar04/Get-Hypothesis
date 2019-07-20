@@ -19,7 +19,7 @@
 #'
 #' @export callhypothesis
 
-callhypothesis_every<-function(df,test,alpha,filename)
+gethypothesis_all<-function(df,test,alpha,filename)
 {
   library("dplyr")
   library("stringi")
@@ -88,11 +88,11 @@ callhypothesis_every<-function(df,test,alpha,filename)
           if(pval<(1-alpha))
             
           {
-            result[aov_count]<-c(" We accept means are different ")}
+            result[aov_count]<-c(" Means are different ")}
           
           else
           { 
-            result[aov_count]<-c(" We accept means are not different ")}
+            result[aov_count]<-c(" Means are not different ")}
           
           pval_df[aov_count]<-pval
           statget[aov_count]<-stattemp
@@ -134,7 +134,7 @@ callhypothesis_every<-function(df,test,alpha,filename)
           pval<-round(pval,3)
           stattemp<-unlist(t.test(unlist(df[i])~unlist(df[j]), mu=0,alt="two.sided",conf=alpha,var.eq=F,paired=F))["statistic.t"]
           stattemp<-round(as.numeric(stattemp),3)
-          temp<-c(names(df[i])," by ",names(df[j]))
+          temp<-c(names(df[i])," grouped by ",names(df[j]))
           
           if(pval<(1-alpha))
           {
@@ -187,7 +187,7 @@ callhypothesis_every<-function(df,test,alpha,filename)
           pval<-round(as.double(pval),3)
           stattemp<-unlist(t.test(unlist(df[i])~unlist(df[j]), mu=0,alt="less",conf=alpha,var.eq=F,paired=F))["statistic.t"]
           stattemp<-round(as.numeric(stattemp),3)
-          temp<-c(names(df[i])," vs ",names(df[j]))
+          temp<-c(names(df[i])," grouped by ",names(df[j]))
           
           if(pval<(1-alpha))
           {
@@ -201,7 +201,7 @@ callhypothesis_every<-function(df,test,alpha,filename)
           
           pval_df[t_count]<-pval
           statget[t_count]<-stattemp
-          claim[t_count]<-"Difference in mean of Variables is lesser than Zero"
+          claim[t_count]<-"Diff between sample means lesser than Zero"
           T_master[t_count]<- StrTrim(StrAlign(paste(temp, collapse = ''),sep = "\\l"),method="both")
           t_count<-(t_count+1)
           
@@ -211,11 +211,11 @@ callhypothesis_every<-function(df,test,alpha,filename)
           pval.sub<-round(pval.sub,3)
           stattemp.sub<-unlist(t.test(unlist(df[i])~unlist(df[j]), mu=0,alt="greater",conf=alpha,var.eq=F,paired=F))["statistic.t"]
           stattemp.sub<-round(as.numeric(stattemp.sub,3))
-          temp.sub<-c(names(df[i])," vs ",names(df[j]))
+          temp.sub<-c(names(df[i])," grouped by ",names(df[j]))
           
           if(pval.sub<(1-alpha))
           {
-            result.sub[t_count.sub]<-c(" Greater than zero")
+            result.sub[t_count.sub]<-c("Greater than zero")
           }
           
           else
@@ -226,7 +226,7 @@ callhypothesis_every<-function(df,test,alpha,filename)
           pval_df.sub[t_count.sub]<-pval.sub
           statget.sub[t_count.sub]<-stattemp.sub
             
-          claim.sub[t_count.sub]<-"Greater than Zero"
+          claim.sub[t_count.sub]<-" Diff between sample means Greater than Zero"
           T_master.sub[t_count.sub]<- StrTrim(StrAlign(paste(temp.sub, collapse = ''),sep = "\\l"),method="both")
           
           t_count.sub<-(t_count.sub+1)
