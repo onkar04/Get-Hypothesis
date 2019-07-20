@@ -19,7 +19,7 @@
 #'
 #' @export callhypothesis
 
-callhypothesis_all<-function(df,test,alpha,filename)
+callhypothesis_every<-function(df,test,alpha,filename)
 {
   library("dplyr")
   library("stringi")
@@ -134,7 +134,7 @@ callhypothesis_all<-function(df,test,alpha,filename)
           pval<-round(pval,3)
           stattemp<-unlist(t.test(unlist(df[i])~unlist(df[j]), mu=0,alt="two.sided",conf=alpha,var.eq=F,paired=F))["statistic.t"]
           stattemp<-round(as.numeric(stattemp),3)
-          temp<-c(names(df[i])," vs ",names(df[j]))
+          temp<-c(names(df[i])," by ",names(df[j]))
           
           if(pval<(1-alpha))
           {
@@ -155,10 +155,9 @@ callhypothesis_all<-function(df,test,alpha,filename)
         
       }}
     
-    
-    T_master<-data.frame("Difference in mean of Variables is Zero or Not"=T_master)
+    T_master<-data.frame("Two tail test on Two samples"=T_master)
     pval_df<-data.frame("P Value"=pval_df)
-    result<-data.frame("Test Result"=result)
+    result<-data.frame("Test Result "=result)
     statget<-data.frame("T Statistic"= statget)
     
     new <- cbind(T_master, statget)
@@ -192,12 +191,12 @@ callhypothesis_all<-function(df,test,alpha,filename)
           
           if(pval<(1-alpha))
           {
-            result[t_count]<-c(" Difference in Means lesser than zero")
+            result[t_count]<-c("Lesser than zero")
           }
           
           else
           { 
-            result[t_count]<-c(" Difference in Means is not Lesser than zero")
+            result[t_count]<-c(" Not lesser than zero")
           }
           
           pval_df[t_count]<-pval
@@ -216,18 +215,18 @@ callhypothesis_all<-function(df,test,alpha,filename)
           
           if(pval.sub<(1-alpha))
           {
-            result.sub[t_count.sub]<-c(" Difference in Means greater than zero")
+            result.sub[t_count.sub]<-c(" Greater than zero")
           }
           
           else
           { 
-            result.sub[t_count.sub]<-c("Difference in Means not greater than zero")
+            result.sub[t_count.sub]<-c(" Not greater than zero")
           }
           
           pval_df.sub[t_count.sub]<-pval.sub
           statget.sub[t_count.sub]<-stattemp.sub
             
-          claim.sub[t_count.sub]<-"Difference in mean of Variables is Greater than Zero"
+          claim.sub[t_count.sub]<-"Greater than Zero"
           T_master.sub[t_count.sub]<- StrTrim(StrAlign(paste(temp.sub, collapse = ''),sep = "\\l"),method="both")
           
           t_count.sub<-(t_count.sub+1)
@@ -239,7 +238,7 @@ callhypothesis_all<-function(df,test,alpha,filename)
     T_master<-data.frame("One Sided T Test of"=T_master)
     pval_df<-data.frame("P Value"=pval_df)
     statget<-data.frame("T Statistic"= statget)
-    result<-data.frame("Test Result"=result)
+    result<-data.frame("Test Result : Difference in Mean of two samples"=result)
     claim<-data.frame("Claim"=claim)
     
     
@@ -251,7 +250,7 @@ callhypothesis_all<-function(df,test,alpha,filename)
     T_master.sub<-data.frame("One Sided T Test of"=T_master.sub)
     pval_df.sub<-data.frame("P Value"=pval_df.sub)
     statget.sub<-data.frame("T Statistic"= statget.sub)
-    result.sub<-data.frame("Test Result"=result.sub)
+    result.sub<-data.frame("Test Result : Difference in Mean of two samples"=result.sub)
     claim.sub<-data.frame("Claim"=claim.sub)
     
     
