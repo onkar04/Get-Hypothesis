@@ -19,9 +19,7 @@
 #'
 #' @export callhypothesis
 
-
-callhypothesis<-function(df,test,alpha,filename)
-  
+callhypothesis_all<-function(df,test,alpha,filename)
 {
   library("dplyr")
   library("stringi")
@@ -50,7 +48,8 @@ callhypothesis<-function(df,test,alpha,filename)
   result.sub<-c()
   claim<-c()
   claim.sub<-c()
-  
+  statget<-c()
+  statget.sub<-c()
   
   
   nums<-names(select_if(df, is.numeric))
@@ -80,8 +79,10 @@ callhypothesis<-function(df,test,alpha,filename)
           
           #cat("\n")
           #print(c(names(df[i]),"vs",names(df[j])))
-          a=aov(unlist(df[i])~unlist(df[j]))
-          pval=round(unlist(summary(a))["Pr(>F)1"],3)
+          a<-aov(unlist(df[i])~unlist(df[j]))
+          pval<-round(unlist(summary(a))["Pr(>F)1"],3)
+          stattemp<-unlist(summary(a))["F value1"]
+          
           temp<-c(names(df[i])," vs ",names(df[j]))
           
           if(pval<(1-alpha))
@@ -94,6 +95,7 @@ callhypothesis<-function(df,test,alpha,filename)
             result[aov_count]<-c(" We accept means are not different ")}
           
           pval_df[aov_count]<-pval
+          statget[aov_count]<-stattemp
           
           anova_master[aov_count]<- StrTrim(StrAlign(paste(temp, collapse = ''),sep = "\\l"),method="both")
           aov_count<-(aov_count+1)
@@ -104,7 +106,10 @@ callhypothesis<-function(df,test,alpha,filename)
     anova_master<-data.frame("Anova Test of Variables"=anova_master)
     pval_df<-data.frame("P Value"=pval_df)
     result<-data.frame("Test Result"= result)
-    new <- cbind(anova_master, pval_df)
+    statget<-data.frame("F Statistic"= statget)
+    
+    new <- cbind(anova_master, statget)
+    new <- cbind(new, pval_df)
     new <- cbind(new,result)
     
     print(new)
@@ -127,6 +132,8 @@ callhypothesis<-function(df,test,alpha,filename)
           temp<-c()
           pval<-t.test(unlist(df[i])~unlist(df[j]), mu=0,alt="two.sided",conf=alpha,var.eq=F,paired=F)$p.value
           pval<-round(pval,3)
+          stattemp<-unlist(t.test(unlist(df[i])~unlist(df[j]), mu=0,alt="two.sided",conf=alpha,var.eq=F,paired=F))["statistic.t"]
+          stattemp<-round(as.numeric(stattemp),3)
           temp<-c(names(df[i])," vs ",names(df[j]))
           
           if(pval<(1-alpha))
@@ -139,8 +146,10 @@ callhypothesis<-function(df,test,alpha,filename)
             result[t_count]<-c(" Means are not different ")
           }
           pval_df[t_count]<-pval
+          statget[t_count]<-stattemp
           T_master[t_count]<- StrTrim(StrAlign(paste(temp, collapse = ''),sep = "\\l"),method="both")
           t_count<-(t_count+1)
+          
           
         }
         
@@ -150,7 +159,10 @@ callhypothesis<-function(df,test,alpha,filename)
     T_master<-data.frame("Difference in mean of Variables is Zero or Not"=T_master)
     pval_df<-data.frame("P Value"=pval_df)
     result<-data.frame("Test Result"=result)
-    new <- cbind(T_master, pval_df)
+    statget<-data.frame("T Statistic"= statget)
+    
+    new <- cbind(T_master, statget)
+    new <- cbind(new, pval_df)
     new <- cbind(new,result)
     
     write.xlsx(new,file=paste(append(as.character(filename),".xlsx"),collapse=""),sheetName="TwoTail_T_Test",append=TRUE)
@@ -174,6 +186,8 @@ callhypothesis<-function(df,test,alpha,filename)
           temp<-c()
           pval<-t.test(unlist(df[i])~unlist(df[j]), mu=0,alt="less",conf=alpha,var.eq=F,paired=F)$p.value
           pval<-round(as.double(pval),3)
+          stattemp<-unlist(t.test(unlist(df[i])~unlist(df[j]), mu=0,alt="less",conf=alpha,var.eq=F,paired=F))["statistic.t"]
+          stattemp<-round(as.numeric(stattemp),3)
           temp<-c(names(df[i])," vs ",names(df[j]))
           
           if(pval<(1-alpha))
@@ -187,6 +201,7 @@ callhypothesis<-function(df,test,alpha,filename)
           }
           
           pval_df[t_count]<-pval
+          statget[t_count]<-stattemp
           claim[t_count]<-"Difference in mean of Variables is lesser than Zero"
           T_master[t_count]<- StrTrim(StrAlign(paste(temp, collapse = ''),sep = "\\l"),method="both")
           t_count<-(t_count+1)
@@ -195,6 +210,8 @@ callhypothesis<-function(df,test,alpha,filename)
           temp.sub<-c()
           pval.sub<- t.test(unlist(df[i])~unlist(df[j]), mu=0,alt="greater",conf=alpha,var.eq=F,paired=F)$p.value
           pval.sub<-round(pval.sub,3)
+          stattemp.sub<-unlist(t.test(unlist(df[i])~unlist(df[j]), mu=0,alt="greater",conf=alpha,var.eq=F,paired=F))["statistic.t"]
+          stattemp.sub<-round(as.numeric(stattemp.sub,3))
           temp.sub<-c(names(df[i])," vs ",names(df[j]))
           
           if(pval.sub<(1-alpha))
@@ -208,6 +225,8 @@ callhypothesis<-function(df,test,alpha,filename)
           }
           
           pval_df.sub[t_count.sub]<-pval.sub
+          statget.sub[t_count.sub]<-stattemp.sub
+            
           claim.sub[t_count.sub]<-"Difference in mean of Variables is Greater than Zero"
           T_master.sub[t_count.sub]<- StrTrim(StrAlign(paste(temp.sub, collapse = ''),sep = "\\l"),method="both")
           
@@ -219,23 +238,26 @@ callhypothesis<-function(df,test,alpha,filename)
     
     T_master<-data.frame("One Sided T Test of"=T_master)
     pval_df<-data.frame("P Value"=pval_df)
+    statget<-data.frame("T Statistic"= statget)
     result<-data.frame("Test Result"=result)
     claim<-data.frame("Claim"=claim)
     
     
     new <- cbind(T_master,claim)
-    new <- cbind(new,pval_df)
+    new <- cbind(new,statget)
+    new <- cbind(new, pval_df)
     new <- cbind(new,result)
-    
     
     T_master.sub<-data.frame("One Sided T Test of"=T_master.sub)
     pval_df.sub<-data.frame("P Value"=pval_df.sub)
+    statget.sub<-data.frame("T Statistic"= statget.sub)
     result.sub<-data.frame("Test Result"=result.sub)
     claim.sub<-data.frame("Claim"=claim.sub)
     
     
     new.sub <- cbind(T_master.sub, claim.sub)
-    new.sub<-cbind(new.sub,pval_df.sub)
+    new.sub<-cbind(new.sub,statget.sub)
+    new.sub <- cbind(new.sub,pval_df.sub)
     new.sub <- cbind(new.sub,result.sub)
     
     write.xlsx(new,file=paste(append(as.character(filename),".xlsx"),collapse=""),sheetName="OneTail_T_Test_lesser",append=TRUE)
@@ -264,7 +286,8 @@ callhypothesis<-function(df,test,alpha,filename)
           #print(c(names(df[i]),"vs",names(df[j])))
           pval<-chisq.test(unlist(df[i]),unlist(df[j]))$p.value
           pval<-round(pval,3)
-          
+          stattemp<-unlist(chisq.test(unlist(df[i]),unlist(df[j])))["statistic.X-squared"]
+          stattemp<-round(as.numeric(stattemp),3)
           temp<-c(names(df[i])," vs ",names(df[j]))
           
           if(pval<(1-alpha))
@@ -277,6 +300,7 @@ callhypothesis<-function(df,test,alpha,filename)
             result[chi_count]<-c(" Categorical Variables are Independent ")}
           
           pval_df[chi_count]<-pval
+          statget[chi_count]<-stattemp
           chi_master[chi_count]<- StrTrim(StrAlign(paste(temp, collapse = ''),sep = "\\l"),method="both")
           chi_count<-(chi_count+1)
           
@@ -286,9 +310,11 @@ callhypothesis<-function(df,test,alpha,filename)
     
     chi_master<-data.frame("CHI square Independence test on Categorical Variable"=chi_master)
     pval_df<-data.frame("P Value"=pval_df)
+    statget<-data.frame("X2 Statistic"= statget)
     result<-data.frame("Test Result"=result)
     
-    new <- cbind(chi_master,pval_df)
+    new <- cbind(chi_master,statget)
+    new <- cbind(new,pval_df)
     new <- cbind(new,result)
     
     write.xlsx(new,file=paste(append(as.character(filename),".xlsx"),collapse=""),sheetName="Chisquare",append=TRUE)
