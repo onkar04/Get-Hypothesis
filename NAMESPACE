@@ -1,1 +1,1 @@
-exportPattern("callhypothesis_every")
+exportPattern("gethypothesis_all")
