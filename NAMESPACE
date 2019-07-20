@@ -1,1 +1,1 @@
-exportPattern("stats_get_git")
+exportPattern("callhypothesis")
