@@ -1,12 +1,12 @@
 Package: gethypothesisevery
 Type: Package
-Title: Hypothesis testing 
+Title: Does Two Tail and One Tail T test, ANOVA and Chi Sq test 
 Version: 0.1.0
 Author: Onkar Ankalkope
-Maintainer: Onkar Ankalkope<onkar.ankalkope@praxis.ac.in>
-Description: Does all possible hypothesis testing and outputs results and stores them in excel file 
-License: Free Use
+Maintainer: Onkar Ankalkope<onkar.ankalkope@gmail.com>
+Description: Input a dataframe, the package prints results of all possible hypothesis tests and stores them in excel file 
+License: GPL-2
 Encoding: UTF-8
-LazyData: FALSE
+LazyData: TRUE
 Imports : 
     dplyr,stringi,DescTools,xlsx
